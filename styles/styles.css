@@ -14,6 +14,20 @@
 .text-gray{
     color: #393a3b;
 }
+.section-heading{
+    font-weight: 800;
+    font-size: 32px;
+    color: #0D1321;
+    text-align: center;
+    margin-bottom: 24px;
+}
+.section-description{
+    font-size: 14px;
+    text-align: center;
+    color: #393a3b;
+    margin-bottom: 45px;
+}
+
 
 /* Banner styles */
 .banner{
@@ -49,3 +63,39 @@
     font-size: 20px;
     font-weight: 600;
 }
+
+/* Why web section  styles */
+.why-web{
+    width: 1100px;
+    height: 1350px;
+    padding: 75px 90px;
+    margin: 0 auto;
+}
+.why-web-container{
+    width: 900px;
+    height: 1200px;
+    margin: 0 auto;
+}
+.content-heading{
+    font-size: 24px;
+    font-weight: 700;
+    color: #393a3b;
+    margin-bottom: 16px;
+}
+.content-description{
+    font-size: 14px;
+    color: #393a3b;
+    margin-bottom: 32px;
+}
+.content-btn{
+    padding: 20px;
+    font-weight: 600;
+    border: 1px solid rgb(13, 19, 33);
+}
+.content-container{
+    display: flex;
+    gap: 50px;
+    justify-content: space-between;
+    padding: 48px;
+}
+
