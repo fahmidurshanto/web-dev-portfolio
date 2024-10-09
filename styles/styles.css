@@ -1,0 +1,51 @@
+/* Font family from google font */
+@import url('https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Azeret Mono", monospace;
+}
+
+/* Shared styles */
+.text-dark{
+    color: #0D1321;
+}
+.text-gray{
+    color: #393a3b;
+}
+
+/* Banner styles */
+.banner{
+    width: 1400px;
+    height: 650px;
+    background-image: url("/assets/Hero-bg.png");
+    text-align: center;
+}
+.banner-container{
+    width: 1000px;
+    margin: 0  auto;    
+    padding: 45px 0;
+}
+.banner-heading{
+    font-size: 48px;
+    font-weight: 700;
+    margin-top: 50px;
+    margin-bottom: 25px;
+}
+.heading-description{
+    width: 700px;
+    font-size: 15px;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#banner-btn{
+    background-color: #0D1321;
+    padding: 24px 20px;
+    border-radius: 6px;
+    border: none;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+}
