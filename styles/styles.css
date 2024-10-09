@@ -33,8 +33,10 @@
 .banner{
     width: 1400px;
     height: 650px;
+    margin: 0 auto;
     background-image: url("/assets/Hero-bg.png");
     text-align: center;
+    margin-bottom: 80px;
 }
 .banner-container{
     width: 1000px;
@@ -68,7 +70,7 @@
 .why-web{
     width: 1100px;
     height: 1350px;
-    padding: 75px 90px;
+    padding: 40px 90px;
     margin: 0 auto;
 }
 .why-web-container{
@@ -99,3 +101,14 @@
     padding: 48px;
 }
 
+/* My Inspiration section styles */
+.my-inspiration{
+    width: 1000px;
+    height: 700px;
+    padding: 75px 90px;
+    margin: 0 auto;
+    text-align: center;
+}
+iframe{
+    border-radius: 16px;
+}
