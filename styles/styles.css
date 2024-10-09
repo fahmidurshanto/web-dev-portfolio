@@ -23,6 +23,7 @@
 .bg-yellow{
     background-color: #23970c;
 }
+
 .section-heading{
     font-weight: 800;
     font-size: 32px;
@@ -157,3 +158,29 @@ iframe{
     font-weight: bold;
     color: white;
 }
+/* Next target  section styles */
+.next-target{
+    padding: 48px;
+}
+.react{
+    background-color: rgb(88 196 220);
+    padding: 30px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+}
+.node-js{
+    background-color: rgb(132 186 100);
+    padding: 30px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+}
+.mongodb{
+    background-color: #184d2e;
+    padding: 30px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+}
+.next-image{
+    padding: 16px 0;
+}
+
