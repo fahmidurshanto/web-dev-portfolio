@@ -213,7 +213,7 @@ iframe {
   width: 1140px;
   height: 315px;
   padding: 100px 16px;
-  background: url("/assets/handshake.jpg");
+  background: url("./assets/handshake.jpg");
   margin-left: auto;
   margin-right: auto;
   border-radius: 16px;
