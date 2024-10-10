@@ -38,6 +38,22 @@
   margin-bottom: 45px;
 }
 
+/* Navbar styles */
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+}
+nav h2{
+    font-size: 28px;
+    font-weight: 800;
+}
+nav button{
+    padding: 17px 24px;
+    border: 1px solid rgb(13, 19, 33);
+    border-radius: 8px;
+}
 /* Banner styles */
 .banner {
   width: 1400px;
