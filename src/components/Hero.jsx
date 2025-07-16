@@ -1,6 +1,6 @@
 import React from 'react';
-import { Parallax } from 'react-parallax';
 import profileImg from "../assets/fahmidurshanto.jpg";
+import { Parallax } from 'react-parallax';
 
 const Hero = () => {
   return (
