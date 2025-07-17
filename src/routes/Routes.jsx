@@ -5,6 +5,7 @@ import ProjectManagement from "../pages/ProjectManagement";
 import SkillsManagement from "../pages/SkillsManagement";
 import CertificationsManagement from "../pages/CertificationsManagement";
 import Messages from "../pages/Messages";
+import EducationManagement from "../pages/EducationManagement";
 
 const routes = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const routes = createBrowserRouter([
             {
                 path: "/messages",
                 element: <Messages />
+            },
+            {
+                path: "/manage-education",
+                element: <EducationManagement />
             }
         ]
     }
