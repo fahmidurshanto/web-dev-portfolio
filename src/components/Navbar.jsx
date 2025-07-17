@@ -18,7 +18,7 @@ const Navbar = () => {
   return (
     <nav className="bg-[var(--background-color)] p-5 sticky top-0 z-50 shadow-xl animate__animated animate__fadeInDown">
       <div className="container mx-auto flex justify-between items-center">
-        <RouterLink to="/" className="text-[var(--text-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition duration-300">Fahmidur Rahaman Shanto</RouterLink>
+        <RouterLink to="/" className="text-[var(--text-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition duration-300">Fahmidur's Portfolio</RouterLink>
 
         <div className="md:hidden">
           <button onClick={toggleMenu} className="text-[var(--text-color)] focus:outline-none">
