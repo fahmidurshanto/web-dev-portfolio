@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+:root {
+  --background-color: #ffffff;
+  --text-color: #1a202c;
+  --primary-color: #007bff;
+  --secondary-color: #f0f2f5;
+}
+
+body.dark-mode {
+  --background-color: #1a202c;
+  --text-color: #e2e8f0;
+  --primary-color: #667eea;
+  --secondary-color: #2d3748;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
