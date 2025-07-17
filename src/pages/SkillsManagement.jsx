@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import localforage from 'localforage';
+import Swal from 'sweetalert2';
 import {
   FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaGitAlt, FaGithub, FaTools, FaTerminal, FaMagic,
   FaBars, FaTimes, FaSun, FaMoon // Include these if you want to use them in the form for selection
@@ -66,6 +67,12 @@ const SkillsManagement = () => {
     }
     setSkills(updatedSkills);
     await localforage.setItem('skills', updatedSkills);
+    Swal.fire({
+      icon: 'success',
+      title: editingSkill ? 'Skill Updated!' : 'Skill Added!',
+      showConfirmButton: false,
+      timer: 1500
+    });
     setNewSkill({
       name: '',
       iconClass: '',
@@ -80,11 +87,28 @@ const SkillsManagement = () => {
   };
 
   const handleDelete = async (skillToDelete) => {
-    const updatedSkills = skills.filter(
-      (skill) => skill !== skillToDelete
-    );
-    setSkills(updatedSkills);
-    await localforage.setItem('skills', updatedSkills);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const updatedSkills = skills.filter(
+          (skill) => skill !== skillToDelete
+        );
+        setSkills(updatedSkills);
+        await localforage.setItem('skills', updatedSkills);
+        Swal.fire(
+          'Deleted!',
+          'Your skill has been deleted.',
+          'success'
+        );
+      }
+    });
   };
 
   return (

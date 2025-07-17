@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import ProjectManagement from "../pages/ProjectManagement";
 import SkillsManagement from "../pages/SkillsManagement";
 import CertificationsManagement from "../pages/CertificationsManagement";
+import Messages from "../pages/Messages";
 
 const routes = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const routes = createBrowserRouter([
             {
                 path: "/manage-certifications",
                 element: <CertificationsManagement />
+            },
+            {
+                path: "/messages",
+                element: <Messages />
             }
         ]
     }

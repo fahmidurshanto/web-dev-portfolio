@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import localforage from 'localforage';
+import Swal from 'sweetalert2';
 
 const ProjectManagement = () => {
   const [projects, setProjects] = useState([]);
@@ -54,6 +55,12 @@ const ProjectManagement = () => {
     }
     setProjects(updatedProjects);
     await localforage.setItem('projects', updatedProjects);
+    Swal.fire({
+      icon: 'success',
+      title: editingProject ? 'Project Updated!' : 'Project Added!',
+      showConfirmButton: false,
+      timer: 1500
+    });
     setNewProject({
       title: '',
       description: '',
@@ -69,11 +76,28 @@ const ProjectManagement = () => {
   };
 
   const handleDelete = async (projectToDelete) => {
-    const updatedProjects = projects.filter(
-      (project) => project !== projectToDelete
-    );
-    setProjects(updatedProjects);
-    await localforage.setItem('projects', updatedProjects);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const updatedProjects = projects.filter(
+          (project) => project !== projectToDelete
+        );
+        setProjects(updatedProjects);
+        await localforage.setItem('projects', updatedProjects);
+        Swal.fire(
+          'Deleted!',
+          'Your project has been deleted.',
+          'success'
+        );
+      }
+    });
   };
 
   return (

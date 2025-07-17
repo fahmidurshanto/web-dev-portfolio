@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import localforage from 'localforage';
+import Swal from 'sweetalert2';
 
 const CertificationsManagement = () => {
   const [certifications, setCertifications] = useState([]);
@@ -8,6 +9,7 @@ const CertificationsManagement = () => {
     issuer: '',
     date: '',
     link: '',
+    thumbnail: '', // New field for thumbnail
   });
   const [editingCertification, setEditingCertification] = useState(null);
 
@@ -25,6 +27,19 @@ const CertificationsManagement = () => {
     setNewCertification({ ...newCertification, [e.target.name]: e.target.value });
   };
 
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewCertification({ ...newCertification, thumbnail: reader.result });
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setNewCertification({ ...newCertification, thumbnail: '' });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     let updatedCertifications;
@@ -38,11 +53,18 @@ const CertificationsManagement = () => {
     }
     setCertifications(updatedCertifications);
     await localforage.setItem('certifications', updatedCertifications);
+    Swal.fire({
+      icon: 'success',
+      title: editingCertification ? 'Certification Updated!' : 'Certification Added!',
+      showConfirmButton: false,
+      timer: 1500
+    });
     setNewCertification({
       name: '',
       issuer: '',
       date: '',
       link: '',
+      thumbnail: '',
     });
   };
 
@@ -52,11 +74,28 @@ const CertificationsManagement = () => {
   };
 
   const handleDelete = async (certToDelete) => {
-    const updatedCertifications = certifications.filter(
-      (cert) => cert !== certToDelete
-    );
-    setCertifications(updatedCertifications);
-    await localforage.setItem('certifications', updatedCertifications);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const updatedCertifications = certifications.filter(
+          (cert) => cert !== certToDelete
+        );
+        setCertifications(updatedCertifications);
+        await localforage.setItem('certifications', updatedCertifications);
+        Swal.fire(
+          'Deleted!',
+          'Your certification has been deleted.',
+          'success'
+        );
+      }
+    });
   };
 
   return (
@@ -78,6 +117,13 @@ const CertificationsManagement = () => {
         <div className="mb-6">
           <label htmlFor="link" className="block text-[var(--text-color)] text-sm font-bold mb-2">Link</label>
           <input type="url" id="link" name="link" value={newCertification.link} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+        </div>
+        <div className="mb-6">
+          <label htmlFor="thumbnail" className="block text-[var(--text-color)] text-sm font-bold mb-2">Certification Thumbnail</label>
+          <input type="file" id="thumbnail" name="thumbnail" accept="image/*" onChange={handleThumbnailChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          {newCertification.thumbnail && (
+            <img src={newCertification.thumbnail} alt="Thumbnail Preview" className="mt-2 w-24 h-24 object-cover rounded" />
+          )}
         </div>
         <div className="flex items-center justify-center">
           <button type="submit" className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">{editingCertification ? 'Update Certification' : 'Add Certification'}</button>
