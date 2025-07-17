@@ -120,7 +120,7 @@ const CertificationsManagement = () => {
         </div>
         <div className="mb-6">
           <label htmlFor="thumbnail" className="block text-[var(--text-color)] text-sm font-bold mb-2">Certification Thumbnail</label>
-          <input type="file" id="thumbnail" name="thumbnail" accept="image/*" onChange={handleThumbnailChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          <input type="file" id="thumbnail" name="thumbnail" accept="image/*,application/pdf" onChange={handleThumbnailChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
           {newCertification.thumbnail && (
             <img src={newCertification.thumbnail} alt="Thumbnail Preview" className="mt-2 w-24 h-24 object-cover rounded" />
           )}

@@ -23,7 +23,11 @@ const Certifications = () => {
             certifications.map((cert, index) => (
               <div key={index} className="bg-[var(--secondary-color)] rounded-lg shadow-2xl p-8 text-center transform transition duration-500 hover:scale-105 hover:bg-[var(--primary-color)] animate__animated animate__fadeInUp animate__delay-1s">
                 {cert.thumbnail && (
-                  <img src={cert.thumbnail} alt={cert.name} className="w-full h-48 object-cover rounded-md mb-4" />
+                  cert.thumbnail.startsWith('data:application/pdf') ? (
+                    <iframe src={cert.thumbnail} title={cert.name} className="w-full h-48 rounded-md mb-4 border-none"></iframe>
+                  ) : (
+                    <img src={cert.thumbnail} alt={cert.name} className="w-full h-48 object-cover rounded-md mb-4" />
+                  )
                 )}
                 <h3 className="text-2xl font-bold mb-2 text-[var(--text-color)]">{cert.name}</h3>
                 <p className="text-[var(--text-color)] mb-1"><strong>Issuer:</strong> {cert.issuer}</p>
