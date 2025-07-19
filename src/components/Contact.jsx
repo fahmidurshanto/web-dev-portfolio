@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FaLinkedin, FaGithub, FaTwitter, FaHackerrank, FaDev, FaFreeCodeCamp } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaTwitter, FaHackerrank, FaDev, FaFreeCodeCamp, FaFacebook, FaInstagram } from 'react-icons/fa';
+import { FaSquareThreads } from 'react-icons/fa6';
 import Swal from 'sweetalert2';
 import { createMessage } from '../utils/api';
 import { Link } from 'react-router-dom';
@@ -82,8 +83,17 @@ const Contact = () => {
               <Link to="https://devpost.com/your-profile" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaDev size={30} className="mr-4" /> Devpost
               </Link>
-              <Link to="https://www.freecodecamp.org/fahmidurshanto" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+              <Link to="https://www.freecodecamp.org/your-profile" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaFreeCodeCamp size={30} className="mr-4" /> freeCodeCamp
+              </Link>
+              <Link to="https://www.facebook.com/mdfahmidurrahman.shanto.9/" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+                <FaFacebook size={30} className="mr-4" /> Facebook
+              </Link>
+              <Link to="https://www.instagram.com/fahmidurrahamanshanto/" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+                <FaInstagram size={30} className="mr-4" /> Instagram
+              </Link>
+              <Link to="https://www.threads.com/@fahmidurrahamanshanto" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+                <FaSquareThreads size={30} className="mr-4" /> Threads
               </Link>
             </div>
           </div>
