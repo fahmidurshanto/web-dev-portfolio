@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { createMessage } from '../utils/api';
+import { Link } from 'react-router-dom';
 
 const Contact = () => {
   const [name, setName] = useState('');
