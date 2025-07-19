@@ -80,10 +80,10 @@ const Contact = () => {
               <Link to="https://www.hackerrank.com/profile/fahmidurrahaman1" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaHackerrank size={30} className="mr-4" /> HackerRank
               </Link>
-              <Link to="https://devpost.com/your-profile" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+              <Link to="https://devpost.com/fahmidurrahamanshanto" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaDev size={30} className="mr-4" /> Devpost
               </Link>
-              <Link to="https://www.freecodecamp.org/your-profile" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+              <Link to="https://www.freecodecamp.org/fahmidurshanto" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaFreeCodeCamp size={30} className="mr-4" /> freeCodeCamp
               </Link>
               <Link to="https://www.facebook.com/mdfahmidurrahman.shanto.9/" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
