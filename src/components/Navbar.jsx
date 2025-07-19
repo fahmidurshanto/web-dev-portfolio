@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Link as ScrollLink, animateScroll as scroll } from 'react-scroll';
+import { Link as ScrollLink } from 'react-scroll';
 import { FaBars, FaTimes, FaSun, FaMoon } from 'react-icons/fa';
-import { toggleTheme } from '../main.jsx';
+import { toggleTheme } from '../utils/theme';
+import DigitalWatch from './DigitalWatch';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +28,9 @@ const Navbar = () => {
         </div>
 
         <ul className={`md:flex md:space-x-8 ${isOpen ? 'flex flex-col absolute top-full left-0 w-full bg-[var(--background-color)] p-4 shadow-lg items-center space-y-4 animate__animated animate__fadeInDown animate__faster' : 'hidden'} md:relative md:p-0 md:shadow-none md:flex-row md:space-y-0`}>
+          <li>
+            <DigitalWatch />
+          </li>
           <li>
             <button onClick={toggleTheme} className="text-[var(--text-color)] focus:outline-none cursor-pointer">
               <FaSun size={24} className="hidden dark-mode:block" />

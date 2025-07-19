@@ -35,18 +35,7 @@ const ProjectManagement = () => {
     setNewProject({ ...newProject, [e.target.name]: e.target.value });
   };
 
-  const handleImageChange = (e) => { // Renamed from handleThumbnailChange
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNewProject({ ...newProject, imageUrl: reader.result }); // Changed from thumbnail
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setNewProject({ ...newProject, imageUrl: '' }); // Changed from thumbnail
-    }
-  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
