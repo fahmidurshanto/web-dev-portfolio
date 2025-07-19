@@ -66,15 +66,15 @@ const Contact = () => {
           <div className="mt-8 md:mt-0 w-full md:w-5/12 bg-[var(--secondary-color)] p-10 rounded-lg shadow-2xl animate__animated animate__fadeInUp animate__delay-2s">
             <h3 className="text-2xl font-bold mb-6 text-[var(--text-color)]">Connect with me</h3>
             <div className="flex flex-col space-y-4">
-              <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+              <Link to="https://www.linkedin.com/in/your-profile" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaLinkedin size={30} className="mr-4" /> LinkedIn
-              </a>
-              <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+              </Link>
+              <Link to="https://github.com/fahmidurshanto" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaGithub size={30} className="mr-4" /> GitHub
-              </a>
-              <a href="#" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+              </Link>
+              <Link to="https://twitter.com/FahmidurRShanto" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaTwitter size={30} className="mr-4" /> Twitter
-              </a>
+              </Link>
             </div>
           </div>
         </div>
