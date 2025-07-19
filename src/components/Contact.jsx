@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaLinkedin, FaGithub, FaTwitter, FaHackerrank, FaDev } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaTwitter, FaHackerrank, FaDev, FaFreeCodeCamp } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { createMessage } from '../utils/api';
 import { Link } from 'react-router-dom';
@@ -79,8 +79,11 @@ const Contact = () => {
               <Link to="https://www.hackerrank.com/profile/fahmidurrahaman1" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaHackerrank size={30} className="mr-4" /> HackerRank
               </Link>
-              <Link to="https://devpost.com/fahmidurrahamanshanto" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+              <Link to="https://devpost.com/your-profile" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaDev size={30} className="mr-4" /> Devpost
+              </Link>
+              <Link to="https://www.freecodecamp.org/fahmidurshanto" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+                <FaFreeCodeCamp size={30} className="mr-4" /> freeCodeCamp
               </Link>
             </div>
           </div>
