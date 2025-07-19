@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import localforage from 'localforage';
+import { getCertifications } from '../utils/api';
 
 const Certifications = () => {
   const [certifications, setCertifications] = useState([]);
 
   useEffect(() => {
     const fetchCertifications = async () => {
-      const storedCertifications = await localforage.getItem('certifications');
-      if (storedCertifications) {
-        setCertifications(storedCertifications);
+      try {
+        const response = await getCertifications();
+        setCertifications(response.data || []);
+      } catch (error) {
+        console.error('Error fetching certifications:', error);
       }
     };
     fetchCertifications();
@@ -20,19 +22,14 @@ const Certifications = () => {
         <h2 className="text-4xl font-extrabold text-center mb-12 text-[var(--primary-color)] animate__animated animate__fadeInDown">Certifications</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {certifications.length > 0 ? (
-            certifications.map((cert, index) => (
-              <div key={index} className="bg-[var(--secondary-color)] rounded-lg shadow-2xl p-8 text-center transform transition duration-500 hover:scale-105 hover:bg-[var(--primary-color)] animate__animated animate__fadeInUp animate__delay-1s">
-                {cert.thumbnail && (
-                  cert.thumbnail.startsWith('data:application/pdf') ? (
-                    <iframe src={cert.thumbnail} title={cert.name} className="w-full h-48 rounded-md mb-4 border-none"></iframe>
-                  ) : (
-                    <img src={cert.thumbnail} alt={cert.name} className="w-full h-48 object-cover rounded-md mb-4" />
-                  )
-                )}
+            certifications.map((cert) => (
+              <div key={cert._id} className="bg-[var(--secondary-color)] rounded-lg shadow-2xl p-8 text-center transform transition duration-500 hover:scale-105 hover:bg-[var(--primary-color)] animate__animated animate__fadeInUp animate__delay-1s">
                 <h3 className="text-2xl font-bold mb-2 text-[var(--text-color)]">{cert.name}</h3>
-                <p className="text-[var(--text-color)] mb-1"><strong>Issuer:</strong> {cert.issuer}</p>
-                <p className="text-[var(--text-color)]"><strong>Date:</strong> {cert.date}</p>
-                {cert.link && <a href={cert.link} className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded-full mt-4 inline-block transition duration-300" target="_blank" rel="noopener noreferrer">View Certificate</a>}
+                <p className="text-[var(--text-color)] mb-1"><strong>Issuer:</strong> {cert.issuingOrganization}</p>
+                <p className="text-[var(--text-color)]"><strong>Issue Date:</strong> {new Date(cert.issueDate).toLocaleDateString()}</p>
+                {cert.expirationDate && <p className="text-[var(--text-color)]"><strong>Expiration Date:</strong> {new Date(cert.expirationDate).toLocaleDateString()}</p>}
+                {cert.credentialId && <p className="text-[var(--text-color)]"><strong>Credential ID:</strong> {cert.credentialId}</p>}
+                {cert.credentialUrl && <a href={cert.credentialUrl} className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded-full mt-4 inline-block transition duration-300" target="_blank" rel="noopener noreferrer">View Certificate</a>}
               </div>
             ))
           ) : (

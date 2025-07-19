@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
-import localforage from 'localforage';
 import Swal from 'sweetalert2';
+import { createMessage } from '../utils/api';
 
 const Contact = () => {
   const [name, setName] = useState('');
@@ -11,17 +11,13 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newMessage = {
-      id: Date.now(), // Unique ID for the message
-      name,
-      email,
-      message,
-      timestamp: new Date().toLocaleString(),
+      senderName: name,
+      senderEmail: email,
+      message: message,
     };
 
     try {
-      const existingMessages = await localforage.getItem('contactMessages') || [];
-      const updatedMessages = [...existingMessages, newMessage];
-      await localforage.setItem('contactMessages', updatedMessages);
+      await createMessage(newMessage);
       Swal.fire({
         icon: 'success',
         title: 'Success!',

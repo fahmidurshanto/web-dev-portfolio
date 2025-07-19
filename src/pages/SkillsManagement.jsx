@@ -1,52 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import localforage from 'localforage';
 import Swal from 'sweetalert2';
-import {
-  FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaGitAlt, FaGithub, FaTools, FaTerminal, FaMagic,
-  FaBars, FaTimes, FaSun, FaMoon // Include these if you want to use them in the form for selection
-} from 'react-icons/fa';
-import { SiMongodb, SiExpress, SiTailwindcss, SiFirebase, SiJsonwebtokens } from 'react-icons/si';
-import { IoLogoJavascript } from 'react-icons/io5'; // Corrected import for IoLogoJavascript
-import { VscVscode } from 'react-icons/vsc';
+import { getSkills, createSkill, updateSkill, deleteSkill } from '../utils/api';
 
-// Mapping of icon class names to actual components
-const iconComponents = {
-  FaReact: FaReact,
-  FaNodeJs: FaNodeJs,
-  FaHtml5: FaHtml5,
-  FaCss3Alt: FaCss3Alt,
-  FaGitAlt: FaGitAlt,
-  FaGithub: FaGithub,
-  FaTools: FaTools,
-  FaTerminal: FaTerminal,
-  FaMagic: FaMagic,
-  SiMongodb: SiMongodb,
-  SiExpress: SiExpress,
-  SiTailwindcss: SiTailwindcss,
-  SiFirebase: SiFirebase,
-  SiJsonwebtokens: SiJsonwebtokens,
-  IoLogoJavascript: IoLogoJavascript,
-  VscVscode: VscVscode,
-  // Add other icons as needed
-};
+
+
 
 const SkillsManagement = () => {
   const [skills, setSkills] = useState([]);
   const [newSkill, setNewSkill] = useState({
     name: '',
-    iconClass: '',
     category: '',
-    iconColor: '#000000', // Default color for the icon
+    icon: '', // New field for icon URL
   });
+  const [selectedFile, setSelectedFile] = useState(null);
   const [editingSkill, setEditingSkill] = useState(null);
 
   useEffect(() => {
-    const fetchSkills = async () => {
-      const storedSkills = await localforage.getItem('skills');
-      if (storedSkills) {
-        setSkills(storedSkills);
-      }
-    };
     fetchSkills();
   }, []);
 
@@ -54,39 +23,104 @@ const SkillsManagement = () => {
     setNewSkill({ ...newSkill, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let updatedSkills;
-    if (editingSkill) {
-      updatedSkills = skills.map((skill) =>
-        skill === editingSkill ? newSkill : skill
-      );
-      setEditingSkill(null);
-    } else {
-      updatedSkills = [...skills, newSkill];
+    let iconUrl = newSkill.icon;
+
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+
+      try {
+        const imgbbResponse = await fetch(
+          `https://api.imgbb.com/1/upload?key=ebc8e8779676d69b4a0f03efe9e939c2`,
+          {
+            method: 'POST',
+            body: formData,
+          }
+        );
+        const imgbbData = await imgbbResponse.json();
+        if (imgbbData.success) {
+          iconUrl = imgbbData.data.url;
+        } else {
+          throw new Error('Image upload failed');
+        }
+      } catch (error) {
+        console.error('Error uploading image to imgbb:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Failed to upload image. Please try again.',
+        });
+        return;
+      }
     }
-    setSkills(updatedSkills);
-    await localforage.setItem('skills', updatedSkills);
-    Swal.fire({
-      icon: 'success',
-      title: editingSkill ? 'Skill Updated!' : 'Skill Added!',
-      showConfirmButton: false,
-      timer: 1500
-    });
-    setNewSkill({
-      name: '',
-      iconClass: '',
-      category: '',
-      iconColor: '#000000',
-    });
+
+    try {
+      const skillData = { ...newSkill, icon: iconUrl };
+      console.log('Submitting skill data:', skillData); // Log the data being sent
+      if (editingSkill) {
+        await updateSkill(editingSkill._id, skillData);
+        Swal.fire({
+          icon: 'success',
+          title: 'Skill Updated!',
+          text: 'Your skill has been successfully updated.',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        console.log("Skill successfully sent to the database");
+      } else {
+        await createSkill(skillData);
+        Swal.fire({
+          icon: 'success',
+          title: 'Skill Added!',
+          text: 'Your new skill has been successfully added to the database.',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        console.log("Skill successfully sent to the database");
+      }
+      fetchSkills(); // Refresh the list
+      setEditingSkill(null);
+      setNewSkill({
+        name: '',
+        category: '',
+        icon: '',
+      });
+      setSelectedFile(null);
+    } catch (error) {
+      console.error('Error saving skill:', error.response);
+      if (error.response && error.response.data && error.response.data.message) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: error.response.data.message,
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Failed to save skill. Please try again.',
+        });
+      }
+    }
   };
 
   const handleEdit = (skill) => {
-    setNewSkill(skill);
+    setNewSkill({
+      name: skill.name,
+      category: skill.category,
+      icon: skill.icon || '',
+    });
+    setSelectedFile(null);
     setEditingSkill(skill);
   };
 
-  const handleDelete = async (skillToDelete) => {
+  const handleDelete = async (id) => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -97,20 +131,38 @@ const SkillsManagement = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const updatedSkills = skills.filter(
-          (skill) => skill !== skillToDelete
-        );
-        setSkills(updatedSkills);
-        await localforage.setItem('skills', updatedSkills);
-        Swal.fire(
-          'Deleted!',
-          'Your skill has been deleted.',
-          'success'
-        );
+        try {
+          await deleteSkill(id);
+          fetchSkills(); // Refresh the list
+          Swal.fire(
+            'Deleted!',
+            'Your skill has been deleted.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error deleting skill:', error);
+          Swal.fire(
+            'Error!',
+            'Failed to delete skill. Please try again.',
+            'error'
+          );
+        }
       }
     });
   };
-
+  const fetchSkills = async () => {
+    try {
+      const response = await getSkills();
+      setSkills(response.data || []);
+    } catch (error) {
+      console.error('Error fetching skills:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Failed to fetch skills. Please try again.',
+      });
+    }
+  };
   return (
     <div className="container mx-auto py-8">
       <h2 className="text-3xl font-bold text-center mb-8 text-[var(--text-color)]">Skills Management</h2>
@@ -120,17 +172,27 @@ const SkillsManagement = () => {
           <input type="text" id="name" name="name" value={newSkill.name} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" required />
         </div>
         <div className="mb-4">
-          <label htmlFor="iconClass" className="block text-[var(--text-color)] text-sm font-bold mb-2">Icon Class (e.g., FaReact)</label>
-          <input type="text" id="iconClass" name="iconClass" value={newSkill.iconClass} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
-        </div>
-        <div className="mb-6">
           <label htmlFor="category" className="block text-[var(--text-color)] text-sm font-bold mb-2">Category</label>
-          <input type="text" id="category" name="category" value={newSkill.category} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" required />
+          <select id="category" name="category" value={newSkill.category} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] bg-base-500 leading-tight focus:outline-none focus:shadow-outline" required>
+            <option value="">Select Category</option>
+            <option value="frontend">Frontend</option>
+            <option value="backend">Backend</option>
+            <option value="database">Database</option>
+            <option value="tools">Tools</option>
+            <option value="language">Language</option>
+            <option value="other">Other</option>
+          </select>
         </div>
         <div className="mb-6">
-          <label htmlFor="iconColor" className="block text-[var(--text-color)] text-sm font-bold mb-2">Icon Color</label>
-          <input type="color" id="iconColor" name="iconColor" value={newSkill.iconColor} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline" />
+          <label htmlFor="icon" className="block text-[var(--text-color)] text-sm font-bold mb-2">Icon Image</label>
+          <input type="file" id="icon" name="icon" onChange={handleFileChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          {newSkill.icon && (
+            <div className="mt-2">
+              <img src={newSkill.icon} alt="Skill Icon" className="w-16 h-16 object-contain" />
+            </div>
+          )}
         </div>
+        
         <div className="flex items-center justify-center">
           <button type="submit" className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">{editingSkill ? 'Update Skill' : 'Add Skill'}</button>
         </div>
@@ -139,20 +201,18 @@ const SkillsManagement = () => {
       <div className="mt-12">
         <h3 className="text-2xl font-bold mb-6 text-[var(--text-color)]">Current Skills</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {skills.map((skill, index) => {
-            const IconComponent = iconComponents[skill.iconClass];
+          {skills.map((skill) => {
             return (
-              <div key={index} className="bg-[var(--secondary-color)] rounded-lg shadow-lg p-8">
-                <h4 className="text-xl font-bold mb-2 text-[var(--text-color)]">{skill.name}</h4>
-                <p className="text-[var(--text-color)] mb-4">Category: {skill.category}</p>
-                {IconComponent && <IconComponent size={40} color={skill.iconColor} />}
-                <div className="flex justify-end mt-4 space-x-2">
-                  <button onClick={() => handleEdit(skill)} className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">Edit</button>
-                  <button onClick={() => handleDelete(skill)} className="bg-[var(--secondary-color)] hover:bg-[var(--secondary-color)] text-white font-bold py-2 px-4 rounded">Delete</button>
-                </div>
+            <div key={skill._id} className="bg-[var(--secondary-color)] rounded-lg shadow-lg p-8">
+              {skill.icon && <img src={skill.icon} alt={skill.name} className="w-16 h-16 object-contain mb-4" />}
+              <h4 className="text-xl font-bold mb-2 text-[var(--text-color)]">{skill.name}</h4>
+              <p className="text-[var(--text-color)] mb-2">Category: {skill.category}</p>
+              <div className="flex justify-end mt-4 space-x-2">
+                <button onClick={() => handleEdit(skill)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button>
+                <button onClick={() => handleDelete(skill._id)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
               </div>
-            );
-          })}
+            </div>
+          )})}
         </div>
       </div>
     </div>

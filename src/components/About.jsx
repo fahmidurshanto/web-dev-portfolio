@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Parallax } from 'react-parallax';
-import localforage from 'localforage';
+import { getEducation } from '../utils/api';
 
 const About = () => {
   const [educationEntries, setEducationEntries] = useState([]);
 
   useEffect(() => {
     const fetchEducation = async () => {
-      const storedEducation = await localforage.getItem('education');
-      if (storedEducation) {
-        setEducationEntries(storedEducation);
+      try {
+        const response = await getEducation();
+        setEducationEntries(response.data || []);
+      } catch (error) {
+        console.error('Error fetching education:', error);
       }
     };
     fetchEducation();

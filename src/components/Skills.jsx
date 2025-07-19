@@ -1,41 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import localforage from 'localforage';
-import {
-  FaReact, FaNodeJs, FaHtml5, FaCss3Alt, FaGitAlt, FaGithub, FaTools, FaTerminal, FaMagic,
-} from 'react-icons/fa';
-import { SiMongodb, SiExpress, SiTailwindcss, SiFirebase, SiJsonwebtokens } from 'react-icons/si';
-import { IoLogoJavascript } from 'react-icons/io5'; // Corrected import for IoLogoJavascript
-import { VscVscode } from 'react-icons/vsc';
+import { getSkills } from '../utils/api';
 
-// Mapping of icon class names to actual components
-const iconComponents = {
-  FaReact: FaReact,
-  FaNodeJs: FaNodeJs,
-  FaHtml5: FaHtml5,
-  FaCss3Alt: FaCss3Alt,
-  FaGitAlt: FaGitAlt,
-  FaGithub: FaGithub,
-  FaTools: FaTools,
-  FaTerminal: FaTerminal,
-  FaMagic: FaMagic,
-  SiMongodb: SiMongodb,
-  SiExpress: SiExpress,
-  SiTailwindcss: SiTailwindcss,
-  SiFirebase: SiFirebase,
-  SiJsonwebtokens: SiJsonwebtokens,
-  IoLogoJavascript: IoLogoJavascript,
-  VscVscode: VscVscode,
-  // Add other icons as needed
-};
+
+
 
 const Skills = () => {
   const [skills, setSkills] = useState([]);
 
   useEffect(() => {
     const fetchSkills = async () => {
-      const storedSkills = await localforage.getItem('skills');
-      if (storedSkills) {
-        setSkills(storedSkills);
+      try {
+        const response = await getSkills();
+        setSkills(response.data || []);
+      } catch (error) {
+        console.error('Error fetching skills:', error);
       }
     };
     fetchSkills();
@@ -54,11 +32,11 @@ const Skills = () => {
           <div key={category} className="mb-12">
             <h3 className="text-3xl font-bold mb-8 text-[var(--primary-color)] animate__animated animate__fadeInDown animate__delay-1s">{category}</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
-              {skillsArr.map((skill, index) => {
-                const IconComponent = iconComponents[skill.iconClass];
+              {skillsArr.map((skill) => {
+                
                 return (
-                  <div key={index} className="bg-[var(--secondary-color)] rounded-lg shadow-xl p-6 text-center flex flex-col items-center justify-center transform transition duration-500 hover:scale-105 hover:bg-[var(--primary-color)] animate__animated animate__fadeInUp">
-                    {IconComponent && <IconComponent size={40} color={skill.iconColor} />}
+                  <div key={skill._id} className="bg-[var(--secondary-color)] rounded-lg shadow-xl p-6 text-center flex flex-col items-center justify-center transform transition duration-500 hover:scale-105 hover:bg-[var(--primary-color)] animate__animated animate__fadeInUp">
+                    {skill.icon && <img src={skill.icon} alt={skill.name} className="w-16 h-16 object-contain mb-4" />} {/* Render image icon */}
                     <h4 className="text-lg font-semibold mt-3 text-[var(--text-color)]">{skill.name}</h4>
                   </div>
                 );

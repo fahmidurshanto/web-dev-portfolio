@@ -1,26 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import localforage from 'localforage';
 import Swal from 'sweetalert2';
+import { getEducation, createEducation, updateEducation, deleteEducation } from '../utils/api';
 
 const EducationManagement = () => {
   const [educationEntries, setEducationEntries] = useState([]);
   const [newEducation, setNewEducation] = useState({
     degree: '',
     institution: '',
-    year: '',
+    startDate: '',
+    endDate: '',
     description: '',
   });
   const [editingEducation, setEditingEducation] = useState(null);
 
   useEffect(() => {
-    const fetchEducation = async () => {
-      const storedEducation = await localforage.getItem('education');
-      if (storedEducation) {
-        setEducationEntries(storedEducation);
-      }
-    };
     fetchEducation();
   }, []);
+
+  const fetchEducation = async () => {
+    try {
+      const response = await getEducation();
+      setEducationEntries(response.data || []);
+    } catch (error) {
+      console.error('Error fetching education:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Failed to fetch education entries. Please try again.',
+      });
+    }
+  };
 
   const handleChange = (e) => {
     setNewEducation({ ...newEducation, [e.target.name]: e.target.value });
@@ -28,37 +37,55 @@ const EducationManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let updatedEducationEntries;
-    if (editingEducation) {
-      updatedEducationEntries = educationEntries.map((entry) =>
-        entry === editingEducation ? newEducation : entry
-      );
+    try {
+      if (editingEducation) {
+        await updateEducation(editingEducation._id, newEducation);
+        Swal.fire({
+          icon: 'success',
+          title: 'Education Updated!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      } else {
+        await createEducation(newEducation);
+        Swal.fire({
+          icon: 'success',
+          title: 'Education Added!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+      fetchEducation(); // Refresh the list
       setEditingEducation(null);
-    } else {
-      updatedEducationEntries = [...educationEntries, newEducation];
+      setNewEducation({
+        degree: '',
+        institution: '',
+        startDate: '',
+        endDate: '',
+        description: '',
+      });
+    } catch (error) {
+      console.error('Error saving education:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Failed to save education. Please try again.',
+      });
     }
-    setEducationEntries(updatedEducationEntries);
-    await localforage.setItem('education', updatedEducationEntries);
-    Swal.fire({
-      icon: 'success',
-      title: editingEducation ? 'Education Updated!' : 'Education Added!',
-      showConfirmButton: false,
-      timer: 1500
-    });
-    setNewEducation({
-      degree: '',
-      institution: '',
-      year: '',
-      description: '',
-    });
   };
 
   const handleEdit = (entry) => {
-    setNewEducation(entry);
+    setNewEducation({
+      degree: entry.degree,
+      institution: entry.institution,
+      startDate: entry.startDate ? entry.startDate.substring(0, 10) : '',
+      endDate: entry.endDate ? entry.endDate.substring(0, 10) : '',
+      description: entry.description,
+    });
     setEditingEducation(entry);
   };
 
-  const handleDelete = async (entryToDelete) => {
+  const handleDelete = async (id) => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -69,16 +96,22 @@ const EducationManagement = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const updatedEducationEntries = educationEntries.filter(
-          (entry) => entry !== entryToDelete
-        );
-        setEducationEntries(updatedEducationEntries);
-        await localforage.setItem('education', updatedEducationEntries);
-        Swal.fire(
-          'Deleted!',
-          'Your education entry has been deleted.',
-          'success'
-        );
+        try {
+          await deleteEducation(id);
+          fetchEducation(); // Refresh the list
+          Swal.fire(
+            'Deleted!',
+            'Your education entry has been deleted.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error deleting education:', error);
+          Swal.fire(
+            'Error!',
+            'Failed to delete education. Please try again.',
+            'error'
+          );
+        }
       }
     });
   };
@@ -96,8 +129,12 @@ const EducationManagement = () => {
           <input type="text" id="institution" name="institution" value={newEducation.institution} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" required />
         </div>
         <div className="mb-4">
-          <label htmlFor="year" className="block text-[var(--text-color)] text-sm font-bold mb-2">Year (e.g., 2020-2024)</label>
-          <input type="text" id="year" name="year" value={newEducation.year} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          <label htmlFor="startDate" className="block text-[var(--text-color)] text-sm font-bold mb-2">Start Date</label>
+          <input type="date" id="startDate" name="startDate" value={newEducation.startDate} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" required />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="endDate" className="block text-[var(--text-color)] text-sm font-bold mb-2">End Date (Optional)</label>
+          <input type="date" id="endDate" name="endDate" value={newEducation.endDate} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className="mb-6">
           <label htmlFor="description" className="block text-[var(--text-color)] text-sm font-bold mb-2">Description (Optional)</label>
@@ -111,15 +148,15 @@ const EducationManagement = () => {
       <div className="mt-12">
         <h3 className="text-2xl font-bold text-center mb-6 text-[var(--text-color)]">Current Education</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {educationEntries.map((entry, index) => (
-            <div key={index} className="bg-[var(--secondary-color)] rounded-lg shadow-lg p-8">
+          {educationEntries.map((entry) => (
+            <div key={entry._id} className="bg-[var(--secondary-color)] rounded-lg shadow-lg p-8">
               <h4 className="text-xl font-bold mb-2 text-[var(--text-color)]">{entry.degree}</h4>
               <p className="text-[var(--text-color)] mb-1"><strong>Institution:</strong> {entry.institution}</p>
-              <p className="text-[var(--text-color)] mb-1"><strong>Year:</strong> {entry.year}</p>
+              <p className="text-[var(--text-color)] mb-1"><strong>Dates:</strong> {new Date(entry.startDate).toLocaleDateString()} - {entry.endDate ? new Date(entry.endDate).toLocaleDateString() : 'Present'}</p>
               {entry.description && <p className="text-[var(--text-color)] mb-4">{entry.description}</p>}
               <div className="flex justify-end mt-4 space-x-2">
                 <button onClick={() => handleEdit(entry)} className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">Edit</button>
-                <button onClick={() => handleDelete(entry)} className="bg-[var(--secondary-color)] hover:bg-[var(--secondary-color)] text-white font-bold py-2 px-4 rounded">Delete</button>
+                <button onClick={() => handleDelete(entry._id)} className="bg-[var(--secondary-color)] hover:bg-[var(--secondary-color)] text-white font-bold py-2 px-4 rounded">Delete</button>
               </div>
             </div>
           ))}

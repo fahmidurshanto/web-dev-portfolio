@@ -1,81 +1,104 @@
 import React, { useState, useEffect } from 'react';
-import localforage from 'localforage';
 import Swal from 'sweetalert2';
+import { getProjects, createProject, updateProject, deleteProject } from '../utils/api';
 
 const ProjectManagement = () => {
   const [projects, setProjects] = useState([]);
   const [newProject, setNewProject] = useState({
     title: '',
     description: '',
-    liveLink: '',
-    githubLink: '',
-    thumbnail: '', // New field for thumbnail
+    projectUrl: '', // Changed from liveLink
+    githubUrl: '',  // Changed from githubLink
+    imageUrl: '',   // Changed from thumbnail
   });
   const [editingProject, setEditingProject] = useState(null); // State to hold the project being edited
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      const storedProjects = await localforage.getItem('projects');
-      if (storedProjects) {
-        setProjects(storedProjects);
-      }
-    };
     fetchProjects();
   }, []);
+
+  const fetchProjects = async () => {
+    try {
+      const response = await getProjects();
+      setProjects(response.data || []);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Failed to fetch projects. Please try again.',
+      });
+    }
+  };
 
   const handleChange = (e) => {
     setNewProject({ ...newProject, [e.target.name]: e.target.value });
   };
 
-  const handleThumbnailChange = (e) => {
+  const handleImageChange = (e) => { // Renamed from handleThumbnailChange
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setNewProject({ ...newProject, thumbnail: reader.result });
+        setNewProject({ ...newProject, imageUrl: reader.result }); // Changed from thumbnail
       };
       reader.readAsDataURL(file);
     } else {
-      setNewProject({ ...newProject, thumbnail: '' });
+      setNewProject({ ...newProject, imageUrl: '' }); // Changed from thumbnail
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let updatedProjects;
-    if (editingProject) {
-      // Update existing project
-      updatedProjects = projects.map((project) =>
-        project === editingProject ? newProject : project
-      );
+    try {
+      if (editingProject) {
+        await updateProject(editingProject._id, newProject);
+        Swal.fire({
+          icon: 'success',
+          title: 'Project Updated!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      } else {
+        await createProject(newProject);
+        Swal.fire({
+          icon: 'success',
+          title: 'Project Added!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+      fetchProjects(); // Refresh the list
       setEditingProject(null); // Clear editing state
-    } else {
-      // Add new project
-      updatedProjects = [...projects, newProject];
+      setNewProject({
+        title: '',
+        description: '',
+        projectUrl: '',
+        githubUrl: '',
+        imageUrl: '',
+      });
+    } catch (error) {
+      console.error('Error saving project:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Failed to save project. Please try again.',
+      });
     }
-    setProjects(updatedProjects);
-    await localforage.setItem('projects', updatedProjects);
-    Swal.fire({
-      icon: 'success',
-      title: editingProject ? 'Project Updated!' : 'Project Added!',
-      showConfirmButton: false,
-      timer: 1500
-    });
-    setNewProject({
-      title: '',
-      description: '',
-      liveLink: '',
-      githubLink: '',
-      thumbnail: '',
-    });
   };
 
   const handleEdit = (project) => {
-    setNewProject(project); // Populate form with project data
+    setNewProject({
+      title: project.title,
+      description: project.description,
+      projectUrl: project.projectUrl,
+      githubUrl: project.githubUrl,
+      imageUrl: project.imageUrl,
+    }); // Populate form with project data
     setEditingProject(project); // Set project to be edited
   };
 
-  const handleDelete = async (projectToDelete) => {
+  const handleDelete = async (id) => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -86,16 +109,22 @@ const ProjectManagement = () => {
       confirmButtonText: 'Yes, delete it!'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const updatedProjects = projects.filter(
-          (project) => project !== projectToDelete
-        );
-        setProjects(updatedProjects);
-        await localforage.setItem('projects', updatedProjects);
-        Swal.fire(
-          'Deleted!',
-          'Your project has been deleted.',
-          'success'
-        );
+        try {
+          await deleteProject(id);
+          fetchProjects(); // Refresh the list
+          Swal.fire(
+            'Deleted!',
+            'Your project has been deleted.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error deleting project:', error);
+          Swal.fire(
+            'Error!',
+            'Failed to delete project. Please try again.',
+            'error'
+          );
+        }
       }
     });
   };
@@ -113,18 +142,18 @@ const ProjectManagement = () => {
           <textarea id="description" name="description" value={newProject.description} onChange={handleChange} rows="3" className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" required></textarea>
         </div>
         <div className="mb-4">
-          <label htmlFor="liveLink" className="block text-[var(--text-color)] text-sm font-bold mb-2">Live Link</label>
-          <input type="url" id="liveLink" name="liveLink" value={newProject.liveLink} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          <label htmlFor="projectUrl" className="block text-[var(--text-color)] text-sm font-bold mb-2">Live Link</label>
+          <input type="url" id="projectUrl" name="projectUrl" value={newProject.projectUrl} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className="mb-4">
-          <label htmlFor="githubLink" className="block text-[var(--text-color)] text-sm font-bold mb-2">GitHub Link</label>
-          <input type="url" id="githubLink" name="githubLink" value={newProject.githubLink} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          <label htmlFor="githubUrl" className="block text-[var(--text-color)] text-sm font-bold mb-2">GitHub Link</label>
+          <input type="url" id="githubUrl" name="githubUrl" value={newProject.githubUrl} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className="mb-6">
-          <label htmlFor="thumbnail" className="block text-[var(--text-color)] text-sm font-bold mb-2">Project Thumbnail</label>
-          <input type="file" id="thumbnail" name="thumbnail" accept="image/*" onChange={handleThumbnailChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
-          {newProject.thumbnail && (
-            <img src={newProject.thumbnail} alt="Thumbnail Preview" className="mt-2 w-24 h-24 object-cover rounded" />
+          <label htmlFor="imageUrl" className="block text-[var(--text-color)] text-sm font-bold mb-2">Project Image URL</label>
+          <input type="text" id="imageUrl" name="imageUrl" value={newProject.imageUrl} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          {newProject.imageUrl && (
+            <img src={newProject.imageUrl} alt="Image Preview" className="mt-2 w-24 h-24 object-cover rounded" />
           )}
         </div>
         <div className="flex items-center justify-center">
@@ -135,17 +164,18 @@ const ProjectManagement = () => {
       <div className="mt-12">
         <h3 className="text-2xl font-bold mb-6 text-[var(--text-color)]">Current Projects</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <div key={index} className="bg-[var(--secondary-color)] rounded-lg shadow-lg p-8">
+          {projects.map((project) => (
+            <div key={project._id} className="bg-[var(--secondary-color)] rounded-lg shadow-lg p-8">
               <h4 className="text-xl font-bold mb-2 text-[var(--text-color)]">{project.title}</h4>
               <p className="text-[var(--text-color)] mb-4">{project.description}</p>
+              {project.imageUrl && <img src={project.imageUrl} alt={project.title} className="w-full h-48 object-cover rounded mb-4" />}
               <div className="flex justify-between">
-                {project.liveLink && <a href={project.liveLink} className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded" target="_blank" rel="noopener noreferrer">Live Demo</a>}
-                {project.githubLink && <a href={project.githubLink} className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded" target="_blank" rel="noopener noreferrer">GitHub</a>}
+                {project.projectUrl && <a href={project.projectUrl} className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded" target="_blank" rel="noopener noreferrer">Live Demo</a>}
+                {project.githubUrl && <a href={project.githubUrl} className="bg-[var(--secondary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded" target="_blank" rel="noopener noreferrer">GitHub</a>}
               </div>
               <div className="flex justify-end mt-4 space-x-2">
                 <button onClick={() => handleEdit(project)} className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded">Edit</button>
-                <button onClick={() => handleDelete(project)} className="bg-[var(--secondary-color)] hover:bg-[var(--secondary-color)] text-white font-bold py-2 px-4 rounded">Delete</button>
+                <button onClick={() => handleDelete(project._id)} className="bg-[var(--secondary-color)] hover:bg-[var(--secondary-color)] text-white font-bold py-2 px-4 rounded">Delete</button>
               </div>
             </div>
           ))}

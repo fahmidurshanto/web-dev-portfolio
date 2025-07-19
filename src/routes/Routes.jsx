@@ -6,6 +6,8 @@ import SkillsManagement from "../pages/SkillsManagement";
 import CertificationsManagement from "../pages/CertificationsManagement";
 import Messages from "../pages/Messages";
 import EducationManagement from "../pages/EducationManagement";
+import ProfileSettings from "../pages/ProfileSettings";
+import AdminDashboard from "../pages/AdminDashboard";
 
 const routes = createBrowserRouter([
     {
@@ -35,6 +37,14 @@ const routes = createBrowserRouter([
             {
                 path: "/manage-education",
                 element: <EducationManagement />
+            },
+            {
+                path: "/profile-settings",
+                element: <ProfileSettings />
+            },
+            {
+                path: "/admin-dashboard",
+                element: <AdminDashboard />
             }
         ]
     }

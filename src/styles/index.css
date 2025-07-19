@@ -19,3 +19,13 @@ body {
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+.dark-mode select {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.dark-mode select option {
+  background: var(--secondary-color);
+  color: var(--text-color);
+}
