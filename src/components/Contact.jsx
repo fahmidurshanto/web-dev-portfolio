@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaLinkedin, FaGithub, FaTwitter } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaTwitter, FaHackerrank, FaDev } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import { createMessage } from '../utils/api';
 import { Link } from 'react-router-dom';
@@ -75,6 +75,12 @@ const Contact = () => {
               </Link>
               <Link to="https://twitter.com/FahmidurRShanto" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaTwitter size={30} className="mr-4" /> Twitter
+              </Link>
+              <Link to="https://www.hackerrank.com/profile/fahmidurrahaman1" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+                <FaHackerrank size={30} className="mr-4" /> HackerRank
+              </Link>
+              <Link to="https://devpost.com/fahmidurrahamanshanto" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+                <FaDev size={30} className="mr-4" /> Devpost
               </Link>
             </div>
           </div>
