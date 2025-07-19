@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = axios.create({ baseURL: 'http://localhost:5000/api' }); // Adjust the baseURL to your backend server address
+const API = axios.create({ baseURL: 'https://fahmidurshanto-backend-alpha.vercel.app/api' }); // Adjust the baseURL to your backend server address
 
 // Interceptor to add token to headers (if you implement authentication)
 API.interceptors.request.use((req) => {
