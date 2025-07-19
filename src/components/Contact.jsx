@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaLinkedin, FaGithub, FaTwitter, FaHackerrank, FaDev, FaFreeCodeCamp, FaFacebook, FaInstagram } from 'react-icons/fa';
+import { FaLinkedin, FaGithub, FaTwitter, FaHackerrank, FaDev, FaFreeCodeCamp, FaFacebook, FaInstagram, FaEnvelope, FaPhone } from 'react-icons/fa';
 import { FaSquareThreads } from 'react-icons/fa6';
 import Swal from 'sweetalert2';
 import { createMessage } from '../utils/api';
@@ -95,6 +95,12 @@ const Contact = () => {
               <Link to="https://www.threads.com/@fahmidurrahamanshanto" target="_blank" rel="noopener noreferrer" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
                 <FaSquareThreads size={30} className="mr-4" /> Threads
               </Link>
+              <a href="mailto:fahmidurrahamanshanto@gmail.com" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+                <FaEnvelope size={30} className="mr-4" /> fahmidurrahamanshanto@gmail.com
+              </a>
+              <a href="tel:+8801640301028" className="flex items-center text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300">
+                <FaPhone size={30} className="mr-4" /> +8801640301028
+              </a>
             </div>
           </div>
         </div>
