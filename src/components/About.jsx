@@ -30,7 +30,7 @@ const About = () => {
                   <div key={index} className="mb-4 p-4 rounded-lg shadow-md bg-[var(--secondary-color)]">
                     <h4 className="text-xl font-bold text-[var(--text-color)]">{entry.degree}</h4>
                     <p className="text-[var(--text-color)]"><strong>Institution:</strong> {entry.institution}</p>
-                    <p className="text-[var(--text-color)]"><strong>Year:</strong> {entry.year}</p>
+                    <p className="text-[var(--text-color)]"><strong>Year:</strong> {new Date(entry.startDate).toLocaleDateString('en-US', { year: 'numeric' })} - {entry.endDate ? new Date(entry.endDate).toLocaleDateString('en-US', { year: 'numeric' }) : 'Present'}</p>
                     {entry.description && <p className="text-[var(--text-color)] text-sm mt-2">{entry.description}</p>}
                   </div>
                 ))
