@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Parallax } from 'react-parallax';
 import axios from 'axios';
 import defaultProfileImg from "../assets/fahmidurshanto.jpg";
+import { Link } from "react-router-dom";
+
 
 const Hero = () => {
   const [heroImage, setHeroImage] = useState(defaultProfileImg);
@@ -28,7 +30,7 @@ const Hero = () => {
           <img src={heroImage} alt="Fahmidur Rahaman Shanto" className="w-56 h-56 rounded-full mx-auto mb-6 border-4 border-[var(--text-color)] shadow-2xl animate__animated animate__zoomIn" />
           <h1 className="text-6xl font-extrabold leading-tight animate__animated animate__fadeInUp text-[var(--text-color)]">Fahmidur Rahaman Shanto</h1>
           <p className="text-3xl mt-4 font-light animate__animated animate__fadeInUp animate__delay-1s">MERN Stack Developer</p>
-          <a href="#" className="mt-10 inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105 animate__animated animate__fadeInUp animate__delay-2s">Download Resume</a>
+          <a href="#" className="mt-10 inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105 animate__animated animate__fadeInUp animate__delay-2s"><Link to="https://drive.google.com/file/d/1Z95aDgDRR1d17xzx5JwPZmcFUYoO9hqH/view?usp=sharing">Download Resume</Link></a>
         </div>
       </section>
     </Parallax>
