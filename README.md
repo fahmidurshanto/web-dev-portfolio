@@ -105,7 +105,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ## 📬 Contact
 
-Fahmidur Rahman Shanto - [fahmidurshanto@gmail.com](mailto:fahmidurshanto@gmail.com)
+Fahmidur Rahman Shanto - [fahmidurshanto@gmail.com](mailto:fahmidurrahamanshanto@gmail.com)
 
 Project Link: [https://github.com/fahmidurshanto/web-dev-portfolio](https://github.com/fahmidurshanto/web-dev-portfolio)
 
