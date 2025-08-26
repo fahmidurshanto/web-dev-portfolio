@@ -8,8 +8,6 @@ A modern, responsive, and performant portfolio website built with React.js. This
 
 **Live Demo:** [View Portfolio](https://your-portfolio-link.vercel.app) *(Remember to replace this with your actual Vercel/Netlify link)*
 
-![Portfolio Screenshot](src/assets/images/portfolio-screenshot.png) *(Consider adding a screenshot for visual appeal)*
-
 ## ✨ Features
 
 - **Modern UI/UX Design:** Clean, professional, and visually appealing layout.
