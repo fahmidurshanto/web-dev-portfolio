@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Parallax } from 'react-parallax';
 import axios from 'axios';
-import defaultProfileImg from "../assets/fahmidurshanto.jpg";
 import { Link } from "react-router-dom";
 
+const defaultProfileImg = 'https://res.cloudinary.com/dvtkiwkn2/image/upload/v1757499619/fahmidurshanto_profile_rm86tp.png'
 
 const Hero = () => {
   const [heroImage, setHeroImage] = useState(defaultProfileImg);
