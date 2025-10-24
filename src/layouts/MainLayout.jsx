@@ -5,8 +5,10 @@ import Navbar from '../components/Navbar';
 const MainLayout = () => {
   return (
     <div>
-      <Navbar />
-      <main>
+     <div className='pb-28'>
+       <Navbar />
+     </div>
+      <main className='container mx-auto px-4'>
         <Outlet />
       </main>
       {/* You can add a Footer here */}

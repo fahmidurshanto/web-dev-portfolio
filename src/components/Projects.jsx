@@ -58,7 +58,7 @@ const Projects = () => {
         {technologies.map((tech, index) => (
           <span 
             key={index} 
-            className="bg-[var(--primary-color)] text-white text-xs font-semibold px-2 py-1 rounded-full"
+            className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-sm"
           >
             {tech}
           </span>
@@ -77,21 +77,26 @@ const Projects = () => {
               <Slider {...settings}>
                 {projects.map((project) => (
                   <div key={project._id} className="p-2">
-                    <div className="bg-[var(--secondary-color)] rounded-xl shadow-lg p-5 transform transition-all duration-300 hover:scale-[1.03] hover:shadow-xl border border-[var(--primary-color)] border-opacity-20 h-full">
+                    <div className="bg-[var(--secondary-color)] rounded-xl shadow-lg p-5 transform transition-all duration-300 hover:scale-[1.03] hover:shadow-xl border border-[var(--primary-color)] border-opacity-20 h-full relative overflow-hidden">
+                      {/* Ice effect overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-cyan-50 opacity-20 pointer-events-none"></div>
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-200 rounded-full filter blur-3xl opacity-30 pointer-events-none animate-pulse"></div>
+                      <div className="absolute bottom-0 left-0 w-32 h-32 bg-blue-200 rounded-full filter blur-3xl opacity-20 pointer-events-none animate-pulse" style={{ animationDelay: '1s' }}></div>
+                      
                       {project.imageUrl && (
-                        <img src={project.imageUrl} alt={project.title} className="w-full h-36 object-cover rounded-md mb-3" />
+                        <img src={project.imageUrl} alt={project.title} className="w-full h-36 object-cover rounded-md mb-3 relative z-10" />
                       )}
-                      <h3 className="text-xl font-bold mb-2 text-[var(--text-color)]">{project.title}</h3>
-                      <p className="text-[var(--text-color)] text-sm mb-3 leading-relaxed line-clamp-3">{project.description}</p>
+                      <h3 className="text-xl font-bold mb-2 text-[var(--text-color)] relative z-10">{project.title}</h3>
+                      <p className="text-[var(--text-color)] text-sm mb-3 leading-relaxed line-clamp-3 relative z-10">{project.description}</p>
                       
                       {/* Technologies section */}
                       {renderTechnologies(project.technologies)}
                       
-                      <div className="flex justify-between mt-4 space-x-2">
+                      <div className="flex justify-between mt-4 space-x-2 relative z-10">
                         {project.projectUrl && (
                           <a 
                             href={project.projectUrl} 
-                            className="flex-1 text-center bg-[var(--primary-color)] hover:bg-opacity-90 text-white text-sm font-bold py-2 px-3 rounded-full transition duration-300 truncate"
+                            className="flex-1 text-center bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white text-sm font-bold py-2 px-3 rounded-full transition duration-300 truncate shadow-lg"
                             target="_blank" 
                             rel="noopener noreferrer"
                           >
@@ -101,7 +106,7 @@ const Projects = () => {
                         {project.githubUrl && (
                           <a 
                             href={project.githubUrl} 
-                            className="flex-1 text-center bg-black hover:bg-opacity-90 text-white text-sm font-bold py-2 px-3 rounded-full transition duration-300 truncate"
+                            className="flex-1 text-center bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-800 hover:to-black text-white text-sm font-bold py-2 px-3 rounded-full transition duration-300 truncate shadow-lg"
                             target="_blank" 
                             rel="noopener noreferrer"
                           >

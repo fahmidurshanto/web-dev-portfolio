@@ -23,6 +23,7 @@
     "react-router-dom": "^7.6.3",
     "react-scroll": "^1.9.3",
     "react-slick": "^0.30.3",
+    "react-vertical-timeline-component": "^3.5.3",
     "slick-carousel": "^1.8.1",
     "sort-by": "^0.0.2",
     "sweetalert2": "^11.22.2",
