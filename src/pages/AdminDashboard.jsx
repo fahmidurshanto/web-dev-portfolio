@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  FaTasks, FaBrain, FaAward, FaGraduationCap, FaUserCircle, FaEnvelope,
+  FaTasks, FaBrain, FaAward, FaGraduationCap, FaUserCircle, FaEnvelope, FaBriefcase
 } from 'react-icons/fa';
 
 const AdminDashboard = () => {
@@ -33,6 +33,13 @@ const AdminDashboard = () => {
       icon: <FaGraduationCap size={40} />,
       description: 'Maintain your academic and educational background.',
       color: 'from-green-500 to-emerald-500',
+    },
+    {
+      name: 'Experience Management',
+      path: '/manage-experience',
+      icon: <FaBriefcase size={40} />,
+      description: 'Manage your work experience and education history.',
+      color: 'from-blue-500 to-purple-500',
     },
     {
       name: 'Profile Settings',

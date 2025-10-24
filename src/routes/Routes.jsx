@@ -8,6 +8,7 @@ import Messages from "../pages/Messages";
 import EducationManagement from "../pages/EducationManagement";
 import ProfileSettings from "../pages/ProfileSettings";
 import AdminDashboard from "../pages/AdminDashboard";
+import ExperienceManagement from "../pages/ExperienceManagement";
 
 const routes = createBrowserRouter([
     {
@@ -37,6 +38,10 @@ const routes = createBrowserRouter([
             {
                 path: "/manage-education",
                 element: <EducationManagement />
+            },
+            {
+                path: "/manage-experience",
+                element: <ExperienceManagement />
             },
             {
                 path: "/profile-settings",

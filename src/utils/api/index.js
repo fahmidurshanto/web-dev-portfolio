@@ -33,6 +33,12 @@ export const createEducation = (newEducation) => API.post('/education', newEduca
 export const updateEducation = (id, updatedEducation) => API.patch(`/education/${id}`, updatedEducation);
 export const deleteEducation = (id) => API.delete(`/education/${id}`);
 
+// Experience routes
+export const getExperiences = () => API.get('/experiences');
+export const createExperience = (newExperience) => API.post('/experiences', newExperience);
+export const updateExperience = (id, updatedExperience) => API.patch(`/experiences/${id}`, updatedExperience);
+export const deleteExperience = (id) => API.delete(`/experiences/${id}`);
+
 // Message routes
 export const getMessages = () => API.get('/messages');
 export const createMessage = (newMessage) => API.post('/messages', newMessage);
