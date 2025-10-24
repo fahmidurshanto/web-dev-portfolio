@@ -65,6 +65,12 @@ const Footer = () => {
                 </ScrollLink>
               </li>
               <li>
+                <ScrollLink to="services" smooth={true} className="text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300 flex items-center group cursor-pointer">
+                  <span className="w-2 h-2 bg-[var(--primary-color)] rounded-full mr-3 group-hover:animate-ping"></span>
+                  Services
+                </ScrollLink>
+              </li>
+              <li>
                 <ScrollLink to="projects" smooth={true} className="text-[var(--text-color)] hover:text-[var(--primary-color)] transition duration-300 flex items-center group cursor-pointer">
                   <span className="w-2 h-2 bg-[var(--primary-color)] rounded-full mr-3 group-hover:animate-ping"></span>
                   Projects

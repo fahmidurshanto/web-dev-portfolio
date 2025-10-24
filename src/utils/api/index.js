@@ -51,6 +51,12 @@ export const createProject = (newProject) => API.post('/projects', newProject);
 export const updateProject = (id, updatedProject) => API.patch(`/projects/${id}`, updatedProject);
 export const deleteProject = (id) => API.delete(`/projects/${id}`);
 
+// Service routes
+export const getServices = () => API.get('/services');
+export const createService = (newService) => API.post('/services', newService);
+export const updateService = (id, updatedService) => API.patch(`/services/${id}`, updatedService);
+export const deleteService = (id) => API.delete(`/services/${id}`);
+
 // Skill routes
 export const getSkills = () => API.get('/skills');
 export const createSkill = (newSkill) => API.post('/skills', newSkill);
