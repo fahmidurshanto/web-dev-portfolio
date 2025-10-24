@@ -20,11 +20,13 @@ const Projects = () => {
   const settings = {
     dots: true,
     infinite: true,
-    speed: 500,
+    speed: 800,
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 2500,
+    cssEase: "ease-in-out",
+    pauseOnHover: true,
     responsive: [
       {
         breakpoint: 1024,
@@ -36,39 +38,82 @@ const Projects = () => {
         }
       },
       {
-        breakpoint: 600,
+        breakpoint: 768,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          initialSlide: 1
+          infinite: true,
+          dots: true
         }
       }
     ]
   };
 
+  // Function to render technology tags
+  const renderTechnologies = (technologies) => {
+    if (!technologies || !Array.isArray(technologies) || technologies.length === 0) return null;
+    
+    return (
+      <div className="flex flex-wrap gap-2 mt-3">
+        {technologies.map((tech, index) => (
+          <span 
+            key={index} 
+            className="bg-[var(--primary-color)] text-white text-xs font-semibold px-2 py-1 rounded-full"
+          >
+            {tech}
+          </span>
+        ))}
+      </div>
+    );
+  };
+
   return (
-    <section id="projects" className="py-20 bg-[var(--background-color)] text-[var(--text-color)]">
+    <section id="projects" className="py-16 bg-[var(--background-color)] text-[var(--text-color)]">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-extrabold text-center mb-12 text-[var(--primary-color)] animate__animated animate__fadeInDown">Projects</h2>
+        <h2 className="text-3xl font-extrabold text-center mb-10 text-[var(--primary-color)] animate__animated animate__fadeInDown">Projects</h2>
         {
           projects.length > 0 ? (
-            <Slider {...settings}>
-              {projects.map((project) => (
-                <div key={project._id} className="p-4">
-                  <div className="bg-[var(--secondary-color)] rounded-lg shadow-2xl p-8 transform transition duration-500 hover:scale-105 hover:bg-[var(--primary-color)] animate__animated animate__fadeInUp animate__delay-1s">
-                    {project.imageUrl && (
-                      <img src={project.imageUrl} alt={project.title} className="w-full h-48 object-cover rounded-md mb-4" />
-                    )}
-                    <h3 className="text-2xl font-bold mb-3 text-[var(--text-color)]">{project.title}</h3>
-                    <p className="text-[var(--text-color)] mb-4 leading-relaxed">{project.description}</p>
-                    <div className="flex justify-between mt-6">
-                      {project.projectUrl && <a href={project.projectUrl} className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded-full transition duration-300" target="_blank" rel="noopener noreferrer">Live Demo</a>}
-                      {project.githubUrl && <a href={project.githubUrl} className="bg-black hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded-full transition duration-300" target="_blank" rel="noopener noreferrer">GitHub</a>}
+            <div className="px-4">
+              <Slider {...settings}>
+                {projects.map((project) => (
+                  <div key={project._id} className="p-2">
+                    <div className="bg-[var(--secondary-color)] rounded-xl shadow-lg p-5 transform transition-all duration-300 hover:scale-[1.03] hover:shadow-xl border border-[var(--primary-color)] border-opacity-20 h-full">
+                      {project.imageUrl && (
+                        <img src={project.imageUrl} alt={project.title} className="w-full h-36 object-cover rounded-md mb-3" />
+                      )}
+                      <h3 className="text-xl font-bold mb-2 text-[var(--text-color)]">{project.title}</h3>
+                      <p className="text-[var(--text-color)] text-sm mb-3 leading-relaxed line-clamp-3">{project.description}</p>
+                      
+                      {/* Technologies section */}
+                      {renderTechnologies(project.technologies)}
+                      
+                      <div className="flex justify-between mt-4 space-x-2">
+                        {project.projectUrl && (
+                          <a 
+                            href={project.projectUrl} 
+                            className="flex-1 text-center bg-[var(--primary-color)] hover:bg-opacity-90 text-white text-sm font-bold py-2 px-3 rounded-full transition duration-300 truncate"
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            Live Demo
+                          </a>
+                        )}
+                        {project.githubUrl && (
+                          <a 
+                            href={project.githubUrl} 
+                            className="flex-1 text-center bg-black hover:bg-opacity-90 text-white text-sm font-bold py-2 px-3 rounded-full transition duration-300 truncate"
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                          >
+                            GitHub
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </Slider>
+                ))}
+              </Slider>
+            </div>
           ) : (
             <p className="text-center col-span-full text-[var(--text-color)] text-lg">No projects added yet. Go to <a href="/manage-projects" className="text-[var(--primary-color)] hover:underline font-semibold">Project Management</a> to add some!</p>
           )

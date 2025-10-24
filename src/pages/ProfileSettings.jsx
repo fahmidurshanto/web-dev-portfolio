@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { getUser, updateUser } from '../utils/api';
+import { getUsers, updateUser, createUser } from '../utils/api';
 
 const ProfileSettings = () => {
   const [userData, setUserData] = useState({
@@ -16,22 +16,37 @@ const ProfileSettings = () => {
       website: '',
     },
   });
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // For demonstration, assuming a fixed user ID or fetching the first user
-  // In a real app, this ID would come from authentication context
-  const userId = '60d5ec49f8c7d00015f8e3b1'; // Placeholder ID, replace with actual user ID
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await getUser(userId);
-        setUserData(response.data);
+        // First, try to get all users to see if any exist
+        const usersResponse = await getUsers();
+        if (usersResponse.data && usersResponse.data.length > 0) {
+          // Use the first user if exists
+          const user = usersResponse.data[0];
+          // Ensure socialLinks object exists and has all required properties
+          const processedUser = {
+            ...user,
+            socialLinks: {
+              linkedin: user.socialLinks?.linkedin || '',
+              github: user.socialLinks?.github || '',
+              twitter: user.socialLinks?.twitter || '',
+              website: user.socialLinks?.website || '',
+            }
+          };
+          setUserData(processedUser);
+          setUserId(user._id);
+        } else {
+          // No users exist, create a default user
+          await createDefaultUser();
+        }
       } catch (err) {
         console.error('Error fetching user data:', err);
-        setError('Failed to fetch user data.');
+        setError('Failed to fetch user data. Please try again.');
         Swal.fire({
           icon: 'error',
           title: 'Error!',
@@ -42,7 +57,56 @@ const ProfileSettings = () => {
       }
     };
     fetchUserData();
-  }, [userId]);
+  }, []);
+
+  const createDefaultUser = async () => {
+    try {
+      const defaultUser = {
+        username: 'admin',
+        email: 'admin@example.com',
+        password: 'password123', // In a real app, this should be properly hashed
+        fullName: 'Admin User',
+        bio: 'This is the default admin user',
+        profilePicture: '',
+        socialLinks: {
+          linkedin: '',
+          github: '',
+          twitter: '',
+          website: ''
+        }
+      };
+      
+      const response = await createUser(defaultUser);
+      const newUser = response.data;
+      // Ensure socialLinks object exists and has all required properties
+      const processedUser = {
+        ...newUser,
+        socialLinks: {
+          linkedin: newUser.socialLinks?.linkedin || '',
+          github: newUser.socialLinks?.github || '',
+          twitter: newUser.socialLinks?.twitter || '',
+          website: newUser.socialLinks?.website || '',
+        }
+      };
+      setUserData(processedUser);
+      setUserId(newUser._id);
+      setError(null);
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Default User Created!',
+        text: 'A default admin user has been created. You can now update the profile.',
+      });
+    } catch (err) {
+      console.error('Error creating default user:', err);
+      setError('Failed to create default user. Please try again.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'Failed to create default user. Please try again.',
+      });
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -75,6 +139,15 @@ const ProfileSettings = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!userId) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error!',
+        text: 'No user selected. Please refresh the page.',
+      });
+      return;
+    }
+    
     try {
       await updateUser(userId, userData);
       Swal.fire({
@@ -97,7 +170,7 @@ const ProfileSettings = () => {
     return <div className="text-center text-[var(--text-color)]">Loading profile...</div>;
   }
 
-  if (error) {
+  if (error && !userId) {
     return <div className="text-center text-red-500">Error: {error}</div>;
   }
 
@@ -107,19 +180,19 @@ const ProfileSettings = () => {
       <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-[var(--secondary-color)] p-8 rounded-lg shadow-lg">
         <div className="mb-4">
           <label htmlFor="username" className="block text-[var(--text-color)] text-sm font-bold mb-2">Username</label>
-          <input type="text" id="username" name="username" value={userData.username} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" required />
+          <input type="text" id="username" name="username" value={userData.username || ''} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" required />
         </div>
         <div className="mb-4">
           <label htmlFor="email" className="block text-[var(--text-color)] text-sm font-bold mb-2">Email</label>
-          <input type="email" id="email" name="email" value={userData.email} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" required />
+          <input type="email" id="email" name="email" value={userData.email || ''} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" required />
         </div>
         <div className="mb-4">
           <label htmlFor="fullName" className="block text-[var(--text-color)] text-sm font-bold mb-2">Full Name</label>
-          <input type="text" id="fullName" name="fullName" value={userData.fullName} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          <input type="text" id="fullName" name="fullName" value={userData.fullName || ''} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className="mb-4">
           <label htmlFor="bio" className="block text-[var(--text-color)] text-sm font-bold mb-2">Bio</label>
-          <textarea id="bio" name="bio" value={userData.bio} onChange={handleChange} rows="3" className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline"></textarea>
+          <textarea id="bio" name="bio" value={userData.bio || ''} onChange={handleChange} rows="3" className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline"></textarea>
         </div>
         <div className="mb-6">
           <label htmlFor="profilePicture" className="block text-[var(--text-color)] text-sm font-bold mb-2">Profile Picture</label>
@@ -130,19 +203,19 @@ const ProfileSettings = () => {
         </div>
         <div className="mb-4">
           <label htmlFor="socialLinks.linkedin" className="block text-[var(--text-color)] text-sm font-bold mb-2">LinkedIn URL</label>
-          <input type="url" id="socialLinks.linkedin" name="socialLinks.linkedin" value={userData.socialLinks.linkedin} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          <input type="url" id="socialLinks.linkedin" name="socialLinks.linkedin" value={userData.socialLinks?.linkedin || ''} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className="mb-4">
           <label htmlFor="socialLinks.github" className="block text-[var(--text-color)] text-sm font-bold mb-2">GitHub URL</label>
-          <input type="url" id="socialLinks.github" name="socialLinks.github" value={userData.socialLinks.github} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          <input type="url" id="socialLinks.github" name="socialLinks.github" value={userData.socialLinks?.github || ''} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className="mb-4">
           <label htmlFor="socialLinks.twitter" className="block text-[var(--text-color)] text-sm font-bold mb-2">Twitter URL</label>
-          <input type="url" id="socialLinks.twitter" name="socialLinks.twitter" value={userData.socialLinks.twitter} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          <input type="url" id="socialLinks.twitter" name="socialLinks.twitter" value={userData.socialLinks?.twitter || ''} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className="mb-6">
           <label htmlFor="socialLinks.website" className="block text-[var(--text-color)] text-sm font-bold mb-2">Personal Website URL</label>
-          <input type="url" id="socialLinks.website" name="socialLinks.website" value={userData.socialLinks.website} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
+          <input type="url" id="socialLinks.website" name="socialLinks.website" value={userData.socialLinks?.website || ''} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-[var(--text-color)] leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className="flex items-center justify-center">
           <button type="submit" className="bg-[var(--primary-color)] hover:bg-[var(--primary-color)] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save Profile</button>

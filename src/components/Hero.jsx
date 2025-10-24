@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Parallax } from 'react-parallax';
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import { getUsers } from '../utils/api';
 
 const defaultProfileImg = 'https://res.cloudinary.com/dvtkiwkn2/image/upload/v1757499619/fahmidurshanto_profile_rm86tp.png'
 
@@ -9,18 +10,42 @@ const Hero = () => {
   const [heroImage, setHeroImage] = useState(defaultProfileImg);
 
   useEffect(() => {
-    const fetchHeroImage = async () => {
+    const fetchUserData = async () => {
       try {
+        // Try to get user data from the backend
+        const usersResponse = await getUsers();
+        if (usersResponse.data && usersResponse.data.length > 0) {
+          // Use the first user's profile picture if available
+          const user = usersResponse.data[0];
+          if (user.profilePicture) {
+            setHeroImage(user.profilePicture);
+            return;
+          }
+        }
+        
+        // Fallback to the api.json if no users exist or user has no profile picture
         const response = await axios.get('/api.json');
         const storedImage = response.data.profile.heroImage;
         if (storedImage) {
           setHeroImage(storedImage);
         }
       } catch (error) {
-        console.error('Error fetching hero image:', error);
+        console.error('Error fetching user data:', error);
+        // Final fallback to api.json
+        try {
+          const response = await axios.get('/api.json');
+          const storedImage = response.data.profile.heroImage;
+          if (storedImage) {
+            setHeroImage(storedImage);
+          }
+        } catch (jsonError) {
+          console.error('Error fetching hero image from api.json:', jsonError);
+          // Ensure we always have a fallback image
+          setHeroImage(defaultProfileImg);
+        }
       }
     };
-    fetchHeroImage();
+    fetchUserData();
   }, []);
 
   return (
