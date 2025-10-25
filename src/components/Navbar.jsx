@@ -42,15 +42,17 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed w-full z-50  transition-all duration-500 ${
-      scrolled 
-        ? 'bg-[var(--background-color)] bg-opacity-90 backdrop-blur-lg py-3 shadow-2xl' 
-        : 'bg-transparent py-5'
-    }`}>
-      <div className="container mx-auto px-4">
+    <nav
+      className={`fixed w-full z-50  transition-all duration-500 ${
+        scrolled
+          ? "bg-[var(--background-color)] bg-opacity-90 backdrop-blur-lg py-3 shadow-2xl"
+          : "bg-transparent py-5"
+      }`}
+    >
+      <div className="container mx-auto px-2.5">
         <div className="flex justify-between items-center">
-          <RouterLink 
-            to="/" 
+          <RouterLink
+            to="/"
             className="text-[var(--text-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition duration-300 transform hover:scale-105"
           >
             Fahmidur's Portfolio
@@ -60,15 +62,15 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-1">
             <div className="flex items-center space-x-6">
               <DigitalWatch />
-              <button 
-                onClick={toggleTheme} 
+              <button
+                onClick={toggleTheme}
                 className="text-[var(--text-color)] focus:outline-none cursor-pointer transform hover:scale-110 transition duration-300"
                 aria-label="Toggle theme"
               >
                 <FaSun size={22} className="hidden dark-mode:block" />
                 <FaMoon size={22} className="block dark-mode:hidden" />
               </button>
-              
+
               {navItems.map((item) => (
                 <ScrollLink
                   key={item.name}
@@ -88,16 +90,16 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
             <DigitalWatch />
-            <button 
-              onClick={toggleTheme} 
+            <button
+              onClick={toggleTheme}
               className="text-[var(--text-color)] focus:outline-none cursor-pointer"
               aria-label="Toggle theme"
             >
               <FaSun size={20} className="hidden dark-mode:block" />
               <FaMoon size={20} className="block dark-mode:hidden" />
             </button>
-            <button 
-              onClick={toggleMenu} 
+            <button
+              onClick={toggleMenu}
               className="text-[var(--text-color)] focus:outline-none z-50"
               aria-label="Toggle menu"
             >
@@ -107,9 +109,11 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Navigation */}
-        <div className={`md:hidden fixed inset-0 bg-[var(--background-color)] bg-opacity-95 backdrop-blur-lg z-40 transition-all duration-500 ease-in-out ${
-          isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full'
-        }`}>
+        <div
+          className={`md:hidden fixed inset-0 bg-[var(--background-color)] bg-opacity-95 backdrop-blur-lg z-40 transition-all duration-500 ease-in-out ${
+            isOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-full"
+          }`}
+        >
           <div className="flex flex-col items-center justify-center h-full space-y-8">
             {navItems.map((item) => (
               <ScrollLink
