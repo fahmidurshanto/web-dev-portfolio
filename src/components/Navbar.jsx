@@ -43,7 +43,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed w-full z-50  transition-all duration-500 ${
+      className={`fixed w-full z-50 transition-all duration-500 ${
         scrolled
           ? "bg-[var(--background-color)] bg-opacity-90 backdrop-blur-lg py-3 shadow-2xl"
           : "bg-transparent py-5"
@@ -59,16 +59,18 @@ const Navbar = () => {
           </RouterLink>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
-            <div className="flex items-center space-x-6">
-              <DigitalWatch />
+          <div className="hidden md:flex items-center">
+            <div className="flex items-center space-x-1">
+              <div className="text-[var(--text-color)] text-xs">
+                <DigitalWatch />
+              </div>
               <button
                 onClick={toggleTheme}
                 className="text-[var(--text-color)] focus:outline-none cursor-pointer transform hover:scale-110 transition duration-300"
                 aria-label="Toggle theme"
               >
-                <FaSun size={22} className="hidden dark-mode:block" />
-                <FaMoon size={22} className="block dark-mode:hidden" />
+                <FaSun size={18} className="hidden dark-mode:block" />
+                <FaMoon size={18} className="block dark-mode:hidden" />
               </button>
 
               {navItems.map((item) => (
@@ -77,7 +79,7 @@ const Navbar = () => {
                   to={item.to}
                   smooth={true}
                   duration={500}
-                  className="text-[var(--text-color)] text-lg font-medium hover:text-[var(--primary-color)] transition duration-300 cursor-pointer relative group px-3 py-2"
+                  className="text-[var(--text-color)] text-xs font-medium hover:text-[var(--primary-color)] transition duration-300 cursor-pointer relative group px-1 py-2 whitespace-nowrap"
                   onClick={closeMenu}
                 >
                   {item.name}
