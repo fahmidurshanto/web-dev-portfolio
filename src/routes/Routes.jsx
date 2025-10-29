@@ -10,11 +10,13 @@ import ProfileSettings from "../pages/ProfileSettings";
 import AdminDashboard from "../pages/AdminDashboard";
 import ExperienceManagement from "../pages/ExperienceManagement";
 import ServiceManagement from "../pages/ServiceManagement";
+import ErrorPage from "../pages/ErrorPage";
 
 const routes = createBrowserRouter([
     {
         path: "/",
         element: <MainLayout />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 path: "/",
