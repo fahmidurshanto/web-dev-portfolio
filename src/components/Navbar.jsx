@@ -45,15 +45,16 @@ const Navbar = () => {
     <nav
       className={`fixed w-full z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-[var(--background-color)] bg-opacity-90 backdrop-blur-lg py-3 shadow-2xl"
+          ? "py-3 shadow-2xl"
           : "bg-transparent py-5"
       }`}
+      style={scrolled ? { backgroundColor: "var(--background-color)" } : {}}
     >
       <div className="container mx-auto px-2.5">
         <div className="flex justify-between items-center">
           <RouterLink
             to="/"
-            className="text-[var(--text-color)] text-2xl font-bold hover:text-[var(--primary-color)] transition duration-300 transform hover:scale-105 animate__animated animate__fadeInDown"
+            className="text-[var(--text-color)] text-lg sm:text-xl md:text-2xl font-bold hover:text-[var(--primary-color)] transition duration-300 transform hover:scale-105 animate__animated animate__fadeInDown shrink"
           >
             Fahmidur's Portfolio
           </RouterLink>
@@ -91,7 +92,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-4">
+          <div className="md:hidden flex items-center space-x-2 shrink-0">
             <div className="text-[var(--text-color)] text-xs animate__animated animate__fadeIn">
               <DigitalWatch />
             </div>
@@ -115,11 +116,12 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         <div
-          className={`md:hidden fixed inset-0 bg-[var(--background-color)] bg-opacity-95 backdrop-blur-lg z-40 transition-all duration-500 ease-in-out ${
+          className={`md:hidden fixed inset-0 z-40 transition-all duration-500 ease-in-out ${
             isOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-full"
           } animate__animated ${
             isOpen ? "animate__slideInLeft" : "animate__slideOutLeft"
           }`}
+          style={{ backgroundColor: "var(--background-color)" }}
         >
           <div className="flex flex-col items-center justify-center h-full space-y-8">
             {navItems.map((item, index) => (

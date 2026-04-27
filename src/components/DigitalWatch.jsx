@@ -25,18 +25,18 @@ const DigitalWatch = () => {
   const ampm = hours >= 12 ? 'PM' : 'AM';
 
   return (
-    <div className="relative mx-8">
+    <div className="relative mx-2 sm:mx-4 md:mx-8">
       {/* Violet effect container */}
       <div className="absolute inset-0 bg-gradient-to-r from-violet-500 to-purple-500 rounded-lg opacity-30 blur-md animate-pulse"></div>
 
       {/* Digital watch display */}
-      <div className="relative bg-[var(--background-color)] bg-opacity-80 backdrop-blur-sm border border-violet-500 border-opacity-50 rounded-lg p-2 shadow-lg animate__animated animate__fadeIn">
+      <div className="relative bg-[var(--background-color)] bg-opacity-80 backdrop-blur-sm border border-violet-500 border-opacity-50 rounded-lg p-1 sm:p-2 shadow-lg animate__animated animate__fadeIn">
         <div className="flex items-center">
           {/* Violet effect indicators */}
           <div className="w-2 h-2 bg-violet-500 rounded-full mr-2 animate-pulse"></div>
 
           {/* Time display with violet glow */}
-          <div className="text-[var(--text-color)] text-lg font-mono font-bold tracking-wider">
+          <div className="text-[var(--text-color)] text-xs sm:text-sm md:text-lg font-mono font-bold tracking-wider">
             <span className="text-violet-500">{displayHours}</span>
             <span className="text-[var(--text-color)] animate-pulse">:</span>
             <span className="text-violet-500">{minutes}</span>
