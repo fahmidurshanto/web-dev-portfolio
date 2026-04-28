@@ -93,9 +93,6 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-2 shrink-0">
-            <div className="text-[var(--text-color)] text-xs animate__animated animate__fadeIn">
-              <DigitalWatch />
-            </div>
             <button
               onClick={toggleTheme}
               className="text-[var(--text-color)] focus:outline-none cursor-pointer animate__animated animate__fadeIn hover:animate__bounce"

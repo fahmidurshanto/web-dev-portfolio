@@ -116,18 +116,18 @@ const Hero = () => {
           </div>
 
           {/* Spline 3D Section (Right Side) */}
-          <div className="w-full lg:w-1/2 h-[480px] md:h-[500px] lg:h-[550px] flex justify-center items-center order-1 lg:order-2 relative z-10">
+          <div className="w-full lg:w-1/2 h-[480px] md:h-[500px] lg:h-[550px] flex justify-center items-center order-1 lg:order-2 relative z-10 mx-auto">
             <Suspense fallback={
-              <div className="relative group">
+              <div className="relative group mx-auto">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-[80px] opacity-20 animate-pulse group-hover:opacity-40 transition-opacity"></div>
                 <img
                   src={heroImage}
                   alt="Fahmidur Rahaman Shanto"
-                  className={`relative w-48 h-48 md:w-64 md:h-64 lg:w-[400px] lg:h-[400px] rounded-full object-cover border-8 border-white/10 shadow-2xl backdrop-blur-sm transition duration-1000 hover:scale-105 ${isLoaded ? 'animate__animated animate__zoomIn' : ''}`}
+                  className={`relative w-48 h-48 md:w-64 md:h-64 lg:w-[400px] lg:h-[400px] rounded-full object-cover border-8 border-white/10 shadow-2xl backdrop-blur-sm transition duration-1000 hover:scale-105 mx-auto ${isLoaded ? 'animate__animated animate__zoomIn' : ''}`}
                 />
               </div>
             }>
-              <div className="w-full h-full min-w-[280px] select-none">
+              <div className="w-full h-full min-w-[280px] flex justify-center items-center select-none mx-auto">
                 <Spline
                   scene="https://prod.spline.design/A9ENMdKPBRXX8Rbh/scene.splinecode"
                   style={{ width: "100%", height: "100%" }}
