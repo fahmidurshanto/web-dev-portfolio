@@ -91,7 +91,7 @@ const Hero = () => {
                   <svg className="w-5 h-5 transition-transform group-hover:translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
                 </a>
                 <a href="#contact"
-                  className="px-8 py-4 bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-[var(--text-color)] font-bold rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-500 flex items-center justify-center gap-2">
+                  className="px-8 py-4 bg-gray-900 dark:bg-gray-800 border-2 border-gray-900 dark:border-gray-700 text-white font-bold rounded-2xl shadow-lg transition-all duration-300 hover:scale-105 hover:bg-transparent hover:text-gray-900 dark:hover:text-white hover:border-blue-500 flex items-center justify-center gap-2">
                   Get In Touch
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                 </a>
